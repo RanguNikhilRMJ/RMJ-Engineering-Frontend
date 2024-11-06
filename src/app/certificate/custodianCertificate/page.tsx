@@ -31,14 +31,16 @@ const TransferCertificateForm: React.FC = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>
   ) => {
     const { name, value } = e.target;
+  
     setFormData((prev) => ({
       ...prev,
-      [name as string]: value,
+      [name]: value,
     }));
   };
+  
 
   const handleDateChange = (date: Dayjs | null) => {
     setFormData((prev) => ({

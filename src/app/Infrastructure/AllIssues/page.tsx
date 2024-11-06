@@ -1,13 +1,29 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Container } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridPaginationModel } from '@mui/x-data-grid';
 import Layout from '@/components/Sidemenu/Layout';
 import { fetchCardDetailstoken } from "@/modules/apitoken";
 import { DIGITAL_CAMPUS_BASE_URL } from '@/modules/apiConfig';
 
+// Define the data type for the fetched data
+interface DigitalCampusAbsentData {
+  issue_id: string;
+  roomid: string;
+  orgid: string;
+  issuetype: string;
+  description: string;
+  reporteddate: string;
+  status: string;
+  resolveddate: string;
+}
+
 function Page() {
-  const [digitalCampusAbsentData, setDigitalCampusAbsentData] = useState([]);
+  const [digitalCampusAbsentData, setDigitalCampusAbsentData] = useState<DigitalCampusAbsentData[]>([]);
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: 5,
+  });
 
   // Define the columns for the DataGrid
   const columns: GridColDef[] = [
@@ -47,32 +63,31 @@ function Page() {
   }, []);
 
   return (
-    <>
-      <Layout>
-        <Container maxWidth="lg" sx={{ marginTop: 4, marginBottom: 4 }}>
-          <Typography variant="h5" gutterBottom>Infrastructure Issues</Typography>
-          <div style={{ height: 400, width: '100%' }}>
-            <DataGrid
-              rows={digitalCampusAbsentData.map((item, index) => ({ id: index, ...item }))}
-              columns={columns}
-              pageSize={5}
-              rowsPerPageOptions={[5, 10, 20]}
-              sx={{
-                backgroundColor: "#f9f9f9",
-                "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: "black",
-                  color: "blue",
-                  fontWeight: "bold",
-                },
-                "& .MuiDataGrid-columnSeparator": {
-                  display: "none",
-                },
-              }}
-            />
-          </div>
-        </Container>
-      </Layout>
-    </>
+    <Layout>
+      <Container maxWidth="lg" sx={{ marginTop: 4, marginBottom: 4 }}>
+        <Typography variant="h5" gutterBottom>Infrastructure Issues</Typography>
+        <div style={{ height: 400, width: '100%' }}>
+          <DataGrid
+            rows={digitalCampusAbsentData.map((item, index) => ({ id: index, ...item }))}
+            columns={columns}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={[5, 10, 20]}  // Updated prop name for page size options
+            sx={{
+              backgroundColor: "#f9f9f9",
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "black",
+                color: "blue",
+                fontWeight: "bold",
+              },
+              "& .MuiDataGrid-columnSeparator": {
+                display: "none",
+              },
+            }}
+          />
+        </div>
+      </Container>
+    </Layout>
   );
 }
 

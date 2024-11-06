@@ -177,23 +177,28 @@ const BacklogsTable: React.FC<BacklogsTableProps> = ({
           {hasData ? (
             <Box sx={{ height: 400, width: '100%' }}>
               <DataGrid
-                rows={data.map((item, index) => ({ id: index, ...item }))}
-                columns={columns}
-                pageSize={5}
-                rowsPerPageOptions={[5, 10, 20]}
-                checkboxSelection
-                sx={{
-                    backgroundColor: "#f9f9f9",
-                    "& .MuiDataGrid-columnHeaders": {
-                      backgroundColor: "black", // Custom background color for headers
-                      color: "blue", // Header text color
-                      fontWeight: "bold", // Bold header text
-                    },
-                    "& .MuiDataGrid-columnSeparator": {
-                      display: "none", // Optional: Hide column separators for a cleaner look
-                    },
-                  }}
-              />
+  rows={data.map((item, index) => ({ id: index, ...item }))}
+  columns={columns}
+  checkboxSelection
+  initialState={{
+    pagination: {
+      paginationModel: { pageSize: 5 },
+    },
+  }}
+  pageSizeOptions={[5, 10, 20]}
+  sx={{
+    backgroundColor: "#f9f9f9",
+    "& .MuiDataGrid-columnHeaders": {
+      backgroundColor: "black", // Custom background color for headers
+      color: "blue", // Header text color
+      fontWeight: "bold", // Bold header text
+    },
+    "& .MuiDataGrid-columnSeparator": {
+      display: "none", // Optional: Hide column separators for a cleaner look
+    },
+  }}
+/>
+
             </Box>
           ) : (
             <Box

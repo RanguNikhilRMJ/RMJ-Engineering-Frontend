@@ -1,5 +1,4 @@
-
-"use client"
+"use client";
 import React, { useState } from 'react';
 import {
   Box,
@@ -17,7 +16,7 @@ import {
   DialogContent,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { DataGrid } from '@mui/x-data-grid'; // Import DataGrid
+import { DataGrid, GridPaginationModel } from '@mui/x-data-grid'; // Import DataGrid
 
 interface StudentData {
   StudentRollNo: string;
@@ -34,7 +33,6 @@ interface ProgressCardProps {
   dialogData: StudentData[]; // Data to display in the dialog
   columns: Array<{ field: string; headerName: string; flex: number }>; // Define the columns prop
   iconColor: string;
-
 }
 
 const ProgressCard: React.FC<ProgressCardProps> = ({
@@ -43,10 +41,14 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
   percentage,
   paragraph,
   dialogData,
-  columns, 
-  iconColor// Destructure the columns prop
+  columns,
+  iconColor,
 }) => {
   const [open, setOpen] = useState(false);
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: 5,
+  });
   const theme = useTheme();
 
   const handleClickOpen = () => {
@@ -62,50 +64,49 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
       <Paper
         elevation={2}
         sx={{
-          boxShadow: theme.shadows[3],          
+          boxShadow: theme.shadows[3],
           padding: '10px',
           width: '100%',
           margin: 'auto',
           backgroundColor: "#e8e8e8",
-          position: "relative"
+          position: "relative",
         }}
-        
       >
         <Box display="flex" justifyContent="center" mb={2}>
           <Avatar sx={{ bgcolor: `${iconColor}` }}>
-          <Typography variant="h6">
-           {iconColor === 'red' ? 'A' : iconColor === 'green' ? 'P' : ''}
-          </Typography>
+            <Typography variant="h6">
+              {iconColor === 'red' ? 'A' : iconColor === 'green' ? 'P' : ''}
+            </Typography>
           </Avatar>
           <Typography variant="h5" textAlign="center" sx={{ marginLeft: '10px', fontWeight: 'bold' }}>
             {subject}
           </Typography>
           <Box
-          onClick={handleClickOpen}
-          sx={{
-            width: '60px',
-            height: '24px',
-            border: '1px solid black',
-            borderRadius: '12px',
-            cursor: 'pointer',
-            padding: '2px',
-            position: "absolute",
-            display:"flex",
-            justifyContent:"center",
-            bottom:0,
-            right: 0,
-            marginBottom:"20px",
-            marginRight:"10px"
-          }}
-        >
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ fontWeight: 'bold', fontSize: '12px',margin:"auto" }}
+            onClick={handleClickOpen}
+            sx={{
+              width: '60px',
+              height: '24px',
+              border: '1px solid black',
+              borderRadius: '12px',
+              cursor: 'pointer',
+              padding: '2px',
+              position: "absolute",
+              display: "flex",
+              justifyContent: "center",
+              bottom: 0,
+              right: 0,
+              marginBottom: "20px",
+              marginRight: "10px",
+            }}
           >
-            More▽
-          </Typography>
-        </Box>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontWeight: 'bold', fontSize: '12px', margin: "auto" }}
+            >
+              More▽
+            </Typography>
+          </Box>
         </Box>
         <Box>
           <Typography variant="body2" textAlign="center" sx={{ marginLeft: '10px' }}>
@@ -120,9 +121,6 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
             </Typography>
           </Box>
         )}
-
-      
-
         {typeof percentage === 'number' && (
           <Box display="flex" justifyContent="center" alignItems="center" position="relative">
             <CircularProgress variant="determinate" value={percentage} size={100} />
@@ -159,9 +157,10 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
           <div style={{ height: 400, width: '100%' }}>
             <DataGrid
               rows={dialogData.map((item, index) => ({ id: index, ...item }))}
-              columns={columns} // Use the passed columns
-              pageSize={5}
-              rowsPerPageOptions={[5, 10, 20]}
+              columns={columns}
+              paginationModel={paginationModel}
+              onPaginationModelChange={setPaginationModel}
+              pageSizeOptions={[5, 10, 20]} // Updated for new DataGrid structure
               sx={{
                 backgroundColor: "#f9f9f9",
                 "& .MuiDataGrid-columnHeaders": {
@@ -183,4 +182,5 @@ const ProgressCard: React.FC<ProgressCardProps> = ({
     </>
   );
 };
+
 export default ProgressCard;
