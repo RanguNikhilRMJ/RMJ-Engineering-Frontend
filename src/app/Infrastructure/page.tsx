@@ -49,10 +49,11 @@ function Page() {
       // status: "pending",
       roomid: parseInt(roomNumber),
       orgid: 1 ,
-      issuetype: selectedBlock,
+      issue_type: selectedBlock,
       description: issueDescription,
       reporteddate: String(new Date().toISOString().split('T')[0]),
-      status: "pending"
+      status: "pending",
+      resolveddate: String(new Date().toISOString().split('T')[0]),
     };
 
     try {
@@ -67,7 +68,7 @@ function Page() {
         setRoomNumber('');
         setAssignedTo('');
       } else {
-        console.error("Failed to submit issue");
+        console.error(payload);
         setServerError("Failed to submit issue");
       }
     } catch (error: any) {
