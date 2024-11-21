@@ -5,7 +5,6 @@ import { DataGrid, GridColDef, GridPaginationModel } from '@mui/x-data-grid';
 import Layout from '@/components/Sidemenu/Layout';
 import { fetchCardDetailstoken } from "@/modules/apitoken";
 import { DIGITAL_CAMPUS_BASE_URL } from '@/modules/apiConfig';
-
 // Define the data type for the fetched data
 interface DigitalCampusAbsentData {
   issue_id: string;
@@ -27,14 +26,14 @@ function Page() {
 
   // Define the columns for the DataGrid
   const columns: GridColDef[] = [
-    { field: 'issue_id', headerName: 'Issue ID', width: 100 },
+    { field: 'issueId', headerName: 'Issue ID', width: 100 },
     { field: 'roomid', headerName: 'Room ID', width: 100 },
     { field: 'orgid', headerName: 'Organization ID', width: 150 },
-    { field: 'issuetype', headerName: 'Issue Type', width: 150 },
+    { field: 'issueType', headerName: 'Issue Type', width: 150 },
     { field: 'description', headerName: 'Description', width: 250 },
-    { field: 'reporteddate', headerName: 'Reported Date', width: 150 },
+    { field: 'reportedDate', headerName: 'Reported Date', width: 150 },
     { field: 'status', headerName: 'Status', width: 150 },
-    { field: 'resolveddate', headerName: 'Resolved Date', width: 150 },
+    { field: 'resolvedDate', headerName: 'Resolved Date', width: 150 },
   ];
 
   // Fetch data from API

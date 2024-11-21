@@ -18,6 +18,7 @@ import GradingIcon from '@mui/icons-material/Grading';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import DescriptionIcon from '@mui/icons-material/Description';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 interface MenuItem {
   label: string;
   path: string;
@@ -173,7 +174,7 @@ const staticMenuDatafaculty: MenuItem[] = [
     icon: <PaymentIcon />, // Added icon
  
     subMenu: [
-      { label: 'fee1', path: '/feereports1/fee1' },
+      { label: 'CollageFeePayment', path: '/feereports1/CollageFeePayment' },
       { label: 'fee2', path: '/feereports1/fee2' },
       { label: 'CAT-B', path: '/feereports1/CAT-B' },
       { label: 'Office Submissions', path: '/feereports1/OfficeSubmissions' },
@@ -216,29 +217,56 @@ const staticMenuDatafaculty: MenuItem[] = [
     icon: <GradingIcon />,  // You can choose a different icon if needed
  
   },
-  {
-    label: 'Infrastructure',  // Correct the spelling of 'results'
-    path: '/Infrastructure',
-    icon: <ApartmentIcon />,  // You can choose a different icon if needed
- 
-  },
+
+
   {
     label: 'Hostal Attendance',  // Correct the spelling of 'results'
     path: '/hostalAttendance',
     icon: <ListAltIcon />,  // You can choose a different icon if needed
- 
+  },
+
+  {
+    label: 'Facelty Research Dashbord',  // Correct the spelling of 'results'
+    path: '',
+    icon: <ListAltIcon />,  // You can choose a different icon if needed
+    subMenu: [
+      { label: 'Facelty Research Dashbord', path: '/FaceltyResearchDashbord' },
+      { label: 'Post', path: '/FaceltyResearchDashbord/Post' },
+    ],
   },
   {
-    label: 'CERTIFICATE',  // Correct the spelling of 'results'
+    label: 'Certificate',  // Correct the spelling of 'results'
     path: '',
     icon: <DescriptionIcon />,  // You can choose a different icon if needed
     subMenu: [
-      { label: 'Bonafide Certificate', path: '/certificate/bonafied' },
+      { label: 'Bonafide Certificate', path: '/certificate/BonafiedCertificate' },
       { label: 'Transfer Certificate', path: '/certificate/TransferCertificate' },
       { label: 'Study Conduct Certificate', path: '/certificate/studyCertificate'},
       { label: 'Incomtax', path: '' },
     ],
   },
+  {
+    label: 'Menteementor',  // Correct the spelling of 'results'
+    path: '',
+    icon: <PeopleAltIcon />,  // You can choose a different icon if needed
+    subMenu: [
+      { label: 'Menteementor', path: '/Menteementor' },
+      { label: 'reports', path: '/Menteementor/reports' },
+      
+    ],
+  },
+
+  {
+    label: 'Infrastructure',  // Correct the spelling of 'results'
+    path: '',
+    icon: <ApartmentIcon />,  // You can choose a different icon if needed
+    subMenu: [
+      { label: 'Issues Assigned To', path: '/Infrastructure/IssuesAssignedTo' },
+      //  { label: 'AllIssues', path: '/Infrastructure/AllIssues' },
+        { label: 'Post Issue', path: '/Infrastructure' },
+    ],
+  },
+ 
 ];
  
 const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
@@ -304,7 +332,7 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
     ) : (
       <Link href={menuItem.path} style={{ textDecoration: 'none', color: 'white', display: "flex" }}>
         <ListItem button>
-          <ListItemIcon sx={{ color: "white" }}>{menuItem.icon}</ListItemIcon> {/* Added ListItemIcon for items without submenus */}
+          <ListItemIcon sx={{color: "white"}}>{menuItem.icon}</ListItemIcon> {/* Added ListItemIcon for items without submenus */}
           <ListItemText primary={menuItem.label} />
         </ListItem>
       </Link>
@@ -317,4 +345,4 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
   );
 };
  
-export default Sidebar;
+export default React.memo(Sidebar);

@@ -34,48 +34,60 @@ function Page() {
   };
 
   const handleSubmit = async () => {
-    if (!selectedBlock || !selectedBranch || !issueDescription || !roomNumber) {
+    if (!selectedBlock || !selectedBranch || !issueDescription || !roomNumber || !assignedTo) {
       setAlertOpen(true);
-      console.log("Some required fields are missing.");
       return;
     }
-
+  
     const payload = {
-      // roomid: parseInt(roomNumber),
-      // orgid: 1,
-      // issuetype: selectedBlock,
-      // description: issueDescription,
-      // reporteddate: new Date().toISOString().split('T')[0],
-      // status: "pending",
-      roomid: parseInt(roomNumber),
-      orgid: 1 ,
+      room: {
+        block: {
+          block_name: selectedBlock,
+          orgid: 1,
+          incharge: {
+            orgid: 1,
+            name: assignedTo,
+            contactInfo: "NA",
+          },
+        },
+        orgid: 1,
+        roomNumber: parseInt(roomNumber, 10),
+      },
+      roomid: parseInt(roomNumber, 10),
+      orgid: 1,
       issue_type: selectedBlock,
       description: issueDescription,
-      reporteddate: String(new Date().toISOString().split('T')[0]),
+      reporteddate: new Date().toISOString().split("T")[0],
       status: "pending",
-      resolveddate: String(new Date().toISOString().split('T')[0]),
+      resolveddate: "",
     };
-
+  
     try {
       const token = localStorage.getItem("token") || undefined;
       const apiEndpoint = `${DIGITAL_CAMPUS_BASE_URL}/createinfraIssues`;
-      const response = await fetchCardDetailstoken(apiEndpoint, 'POST', payload, token);
-      if (response.ok) {
+  
+      const response = await fetchCardDetailstoken(apiEndpoint, "POST", payload, token);
+  
+      if (response) {
+        // Clear form values and display success message
+        setSelectedBlock(null);
+        setSelectedBranch("");
+        setIssueDescription("");
+        setRoomNumber("");
+        setAssignedTo("");
         setSuccessMessage("Issue submitted successfully!");
-        setSelectedBlock('');
-        setSelectedBranch('');
-        setIssueDescription('');
-        setRoomNumber('');
-        setAssignedTo('');
+        setServerError("");
+        setAlertOpen(false);
       } else {
-        console.error(payload);
-        setServerError("Failed to submit issue");
+        setServerError("Failed to submit the issue.");
+        console.log("else executeed")
       }
     } catch (error: any) {
-      console.error("Error submitting issue:", error.message);
       setServerError(`Error: ${error.message}`);
+      console.log("catch executeed")
     }
   };
+  
 
   return (
     <>
@@ -161,6 +173,7 @@ function Page() {
           {alertOpen && <Alert severity="warning">Please fill in all required fields.</Alert>}
           {successMessage && <Alert severity="success">{successMessage}</Alert>}
           {serverError && <Alert severity="error">{serverError}</Alert>}
+
         </Container>
       </Layout>
     </>

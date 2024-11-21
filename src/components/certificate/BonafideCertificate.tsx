@@ -1,7 +1,9 @@
-import React from 'react';
+"use client"
+import React, { useState, useEffect } from 'react';
 import { Typography, Box } from '@mui/material';
 import Image from 'next/image'
-
+import { fetchCardDetailstoken } from "@/modules/apitoken";
+import { DIGITAL_CAMPUS_BASE_URL } from "@/modules/apiConfig";
 interface BonafideCertificateProps {
   collegeName: string;
   aggrigations:string;
@@ -15,7 +17,6 @@ interface BonafideCertificateProps {
   purpose: string;
   date: string;
 }
-
 const BonafideCertificate: React.FC<BonafideCertificateProps> = ({
   collegeName,
   aggrigations,
@@ -29,6 +30,28 @@ const BonafideCertificate: React.FC<BonafideCertificateProps> = ({
   purpose,
   date,
 }) => {
+  // const [bonafiedData, setBonafiedData] = useState<Issue[] | undefined>();
+
+  //const fetchBonafiedData = async (status: string) => {
+  //   try {
+  //     const token = localStorage.getItem("token") || undefined;
+  //     const apiEndpoint = `${DIGITAL_CAMPUS_BASE_URL}/getBonifiedCertificates?studentRollNo=${status}`;
+  //     const fetchedData = await fetchCardDetailstoken(apiEndpoint, "GET", null, token);
+
+  //     if (Array.isArray(fetchedData)) {
+  //       setBonafiedData(fetchedData);
+  //     } else {
+  //       console.error("Data is not an array");
+  //       setBonafiedData([]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     setBonafiedData([]);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchBonafiedData()
+  // }, []);
   return (
     <Box sx={{ padding: ' 20px 20px', maxWidth: '800px', margin: 'auto',border:"2px solid black" }}>
       <div style={{display:"flex",justifyContent:"center"}}>

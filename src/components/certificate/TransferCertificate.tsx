@@ -4,10 +4,9 @@ import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, Ta
 import Image from 'next/image';
 
 interface TransferCertificateProps {
-  collegeName: string;
-  aggrigations: string;
-  address: string;
-  certificateTitle: string;
+  collegeName?: string;
+  organisationAddress?: string;
+  certificateTitle?: string;
   studentName: string;
   admissionNumber: string;
   branch: string;
@@ -25,12 +24,18 @@ interface TransferCertificateProps {
   applicationDate: string;
   dateOfCertificate: string;
   conduct: string;
+  //
+  organisationName: string;
+  organisationBrandName: string;
+  organisationNAAC: string;
+  organisationUGC: string;
+  organisationAICTE: string;
+  tcnumber:string;
 }
 
 const TransferCertificate: React.FC<TransferCertificateProps> = ({
   collegeName,
-  aggrigations,
-  address,
+  organisationAddress,
   certificateTitle,
   studentName,
   admissionNumber,
@@ -49,6 +54,12 @@ const TransferCertificate: React.FC<TransferCertificateProps> = ({
   applicationDate,
   dateOfCertificate,
   conduct,
+  organisationName,
+  organisationBrandName,
+  organisationNAAC,
+  organisationUGC,
+  organisationAICTE,
+  tcnumber,
 }) => {
   return (
     <Box sx={{border:"2px solid black",margin:"10%"}}  className="print-top" >
@@ -92,21 +103,31 @@ const TransferCertificate: React.FC<TransferCertificateProps> = ({
       <Typography variant="subtitle1" align="center" className="print-header" sx={{ fontWeight: "bold" }}>
         (Autonomous)
       </Typography>
-      <Typography variant="subtitle2" align="center" className="print-header" sx={{ padding: "0 40px" }}>
-        {aggrigations}
+       <Typography variant="subtitle2" align="center" className="print-header" sx={{ padding: "0 40px" }}>
+        {organisationName}
+      </Typography>
+      <Typography variant="subtitle2" align="center" className="print-header" sx={{ padding: "0 40px"}}>
+        {organisationBrandName}
       </Typography>
       <Typography variant="subtitle2" align="center" className="print-header" sx={{ padding: "0 40px" }}>
-        {address}
+        {organisationNAAC}
       </Typography>
-
+      <Typography variant="subtitle2" align="center" className="print-header" sx={{ padding: "0 40px" }}>
+        {organisationUGC}
+      </Typography>
+      <Typography variant="subtitle2" align="center" className="print-header" sx={{ padding: "0 40px" }}>
+        {organisationAICTE}
+      </Typography>
+      <Typography variant="subtitle2" align="center" className="print-header" sx={{ padding: "0 40px" }}>
+        {organisationAddress}
+      </Typography>
       <Typography variant="subtitle1" align="center" className="print-header" gutterBottom sx={{ fontWeight: "bold", textDecoration: "underline", marginTop: 1 }}>
         {certificateTitle}
       </Typography>
-
       <Box  className="print-paper" sx={{ p: 3,margin:"20px 60px"  }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="body1" className="print-content">
-            <strong>T.C. No:</strong> UG18838
+            <strong>T.C. No:</strong>{tcnumber}
           </Typography>
           <Typography variant="body1" className="print-content" align="right">
             <strong>Date:</strong> {dateOfCertificate}
@@ -120,7 +141,7 @@ const TransferCertificate: React.FC<TransferCertificateProps> = ({
         ["1. Name of the Student", studentName],
         ["2. Admission Number", admissionNumber],
         ["3. Branch", branch],
-        ["4. Gender", gender],
+        ["4. Gender", gender === "M" ? "Male" : gender === "F" ? "Female" : " "],
         ["5. Name of the Father / Guardian / Husband", fatherName],
         ["6. Nationality and Religion", nationalityAndReligion],
         ["7. Whether candidate belongs SC/ST/BC", categoryGroup],
