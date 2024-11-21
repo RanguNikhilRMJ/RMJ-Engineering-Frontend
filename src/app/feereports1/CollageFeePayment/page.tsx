@@ -165,7 +165,7 @@ const FeePaymentForm: React.FC = () => {
         Object.entries(searchParams).filter(([_, value]) => value.trim() !== '')
       );
 
-      const response = await axios.get('http://localhost:9999/findByDynamicParamsViewStudentFeeDetails1', {
+      const response = await axios.get(`${DIGITAL_CAMPUS_BASE_URL}/findByDynamicParamsViewStudentFeeDetails1`, {
         headers: {
           Authorization: `Bearer ${token}`, // Add token to the request headers 
         },
@@ -187,7 +187,7 @@ const FeePaymentForm: React.FC = () => {
   };
   const handlePaidClick = async (studentrollno: string) => {
     try {
-      const response = await axios.get(`http://localhost:9999/viewStudentFeeDetailsByStudentRollNo`, {
+      const response = await axios.get(`${DIGITAL_CAMPUS_BASE_URL}/viewStudentFeeDetailsByStudentRollNo`, {
         headers: {
           Authorization: ` Bearer ${token}`, // Pass token in the request headers
         },
