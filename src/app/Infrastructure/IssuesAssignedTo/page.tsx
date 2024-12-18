@@ -115,7 +115,7 @@ const StudentList = () => {
   const fetchDigitalCampusAbsentData = async () => {
     try {
       const token = localStorage.getItem("token") || undefined;
-      const apiEndpoint = `${DIGITAL_CAMPUS_BASE_URL}/infraIssuesview`;
+      const apiEndpoint = `${DIGITAL_CAMPUS_BASE_URL}/InfraIssueView`;
       const fetchedData = await fetchCardDetailstoken(apiEndpoint, "GET", null, token);
 
       // Check if fetchedData is an array, then set it

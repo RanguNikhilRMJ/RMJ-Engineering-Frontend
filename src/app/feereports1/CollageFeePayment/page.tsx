@@ -24,7 +24,6 @@ interface Student {
   phoneno:number;
   beingPaid:number;
 }
-
 interface Student1 {
   studentrollno: string;
   name: string;

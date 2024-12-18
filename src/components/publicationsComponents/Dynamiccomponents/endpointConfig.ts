@@ -54,7 +54,7 @@ export const endpointConfig = {
         members: 'string',
         condetedby: 'string',
         proof: 'string',
-        verifiedstatus: 'string',
+        verifiedstatus: 'string', 
         facultyid: 'string',
       },
     },

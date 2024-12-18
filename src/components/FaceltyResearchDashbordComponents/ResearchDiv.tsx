@@ -1,10 +1,8 @@
-"use client"
 import React, { useState } from "react";
 import {
   Box,
   Typography,
   Paper,
-  CircularProgress,
   Dialog,
   AppBar,
   Toolbar,
@@ -12,29 +10,34 @@ import {
   Button,
   DialogTitle,
   DialogContent,
+  DialogActions,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
- 
+import { fetchCardDetailstoken } from "@/modules/apitoken";
+import { DIGITAL_CAMPUS_BASE_URL } from "@/modules/apiConfig";
 interface StudentData {
   [key: string]: string; // Dynamic keys for student data
 }
- 
+
 interface ResearchDivProps {
   subject?: string;
   score?: number;
   percentage?: number;
   dialogData?: StudentData[];
-  columns: Array<{ field: string; headerName: string }>;
+  columns: Array<{ field: string; headerName: string }>; // Column details with header names
   keys: string[]; // Array of dynamic keys
   iconColor?: string;
+  putEndpoint: string; // PUT request endpoint
+  swaggerFields: Record<string, string | number | boolean>; // Swagger fields as a template
 }
- 
+
 const ResearchDiv: React.FC<ResearchDivProps> = ({
   subject,
   score,
@@ -43,115 +46,100 @@ const ResearchDiv: React.FC<ResearchDivProps> = ({
   columns,
   keys,
   iconColor,
+  putEndpoint,
+  swaggerFields,
 }) => {
   const [open, setOpen] = useState(false);
- 
+  const [editOpen, setEditOpen] = useState(false);
+  const [editData, setEditData] = useState<StudentData | null>(null);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
- 
+
   const handleClose = () => {
     setOpen(false);
   };
- 
+
+  const handleEditClick = (data: StudentData) => {
+    setEditData(data);
+    setEditOpen(true);
+  };
+
+  const handleEditClose = () => {
+    setEditOpen(false);
+    setEditData(null);
+  };
+
+  const handleSave = async () => {
+    if (!editData) return;
+  
+    try {
+      const token = localStorage.getItem("token") || undefined; // Retrieve the token from localStorage
+      const apiEndpoint = putEndpoint; // Use the provided PUT endpoint
+  
+      // Call the custom fetch function
+      const response = await fetchCardDetailstoken(apiEndpoint, "PUT", editData, token);
+  
+      console.log("Data successfully updated:", response);
+  
+      setEditOpen(false); 
+    } catch (error:any) {
+      if (error) {
+        console.error(`Error: ${error}`);
+      } else {
+        console.error("Unknown error:", error);
+      }
+    }
+  };
+  
   return (
-    <>
-      <Paper
-        elevation={2}
-        sx={{
-          padding: "10px",
-          width: "200px",
-          margin: "auto",
-          backgroundColor: "#e8e8e8",
-          position: "relative",
-        }}
-      >
-        <Box display="flex" justifyContent="center" mb={2}>
-          <Box
-            onClick={handleClickOpen}
-            sx={{
-              width: "60px",
-              height: "24px",
-              border: "1px solid black",
-              borderRadius: "12px",
-              cursor: "pointer",
-              padding: "2px",
-              position: "absolute",
-              display: "flex",
-              marginTop: "5px",
-              justifyContent: "center",
-              right: 0,
-              top: 0,
-              marginBottom: "20px",
-              marginRight: "10px",
-            }}
-          >
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ fontWeight: "bold", fontSize: "12px", margin: "auto" }}
-            >
-              More▽
-            </Typography>
-          </Box>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <Typography variant="h5" textAlign="center" sx={{ fontSize: "10px" }}>
-            {subject} :
-          </Typography>
-          <Typography variant="h6" textAlign="center" sx={{ color: "blue" }}>
-            {score}
-          </Typography>
-        </Box>
-        {typeof percentage === "number" && (
-          <Box display="flex" justifyContent="center" alignItems="center" position="relative">
-            <CircularProgress variant="determinate" value={percentage} size={100} />
-            <Box
-              position="absolute"
-              top={0}
-              left={0}
-              bottom={0}
-              right={0}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Typography variant="h6">{`${percentage}%`}</Typography>
-            </Box>
-          </Box>
-        )}
-      </Paper>
- 
-      {/* Dialog for showing more details */}
-      <Dialog fullScreen open={open} onClose={handleClose}>
-      <AppBar sx={{ position: 'relative', backgroundColor: "rgb(55, 65, 81)" }}>
-                  <Toolbar>
+    <Paper sx={{ padding: 2, boxShadow: 3 }}>
+      <Typography variant="h6" fontWeight="bold">{subject}</Typography>
+      <Typography variant="body1">Score: {score}</Typography>
+      <Typography variant="body2" color="textSecondary">Percentage: {percentage}%</Typography>
+
+      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+        View Details
+      </Button>
+
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
               <CloseIcon />
             </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6">
+            <Typography variant="h6" sx={{ flex: 1 }}>
               {subject} Details
             </Typography>
           </Toolbar>
         </AppBar>
-        <DialogTitle>Details</DialogTitle>
         <DialogContent>
-          <TableContainer component={Paper}>
+          <TableContainer>
             <Table>
               <TableHead>
                 <TableRow>
-                  {keys.map((key, idx) => (
-                    <TableCell key={idx}
-                    sx={{ backgroundColor: "rgb(46 32 59)", color: "white", fontWeight: "bold" }}>{key}</TableCell>
+                  {columns.map((column) => (
+                    <TableCell key={column.field}>{column.headerName}</TableCell>
                   ))}
+                  <TableCell>Actions</TableCell> {/* Add Actions column for Edit button */}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dialogData?.map((data, idx) => (
-                  <TableRow key={idx}>
-                    {keys.map((key, keyIdx) => (
-                      <TableCell key={keyIdx}>{data[key]}</TableCell>
+                {dialogData?.map((row, index) => (
+                  <TableRow key={index}>
+                    {columns.map((column) => (
+                      <TableCell key={column.field}>{row[column.field]}</TableCell> // Use column.field for dynamic keys
                     ))}
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleEditClick(row)}
+                      >
+                        Edit
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -159,10 +147,28 @@ const ResearchDiv: React.FC<ResearchDivProps> = ({
           </TableContainer>
         </DialogContent>
       </Dialog>
-    </>
+
+      <Dialog open={editOpen} onClose={handleEditClose} fullWidth maxWidth="sm">
+        <DialogTitle>Edit Details</DialogTitle>
+        <DialogContent>
+          {columns.map((column) => (
+            <TextField
+              key={column.field}
+              label={column.headerName}
+              value={editData ? editData[column.field] : ""}
+              onChange={(e) => setEditData((prev) => ({ ...prev, [column.field]: e.target.value }))}
+              fullWidth
+              margin="normal"
+            />
+          ))}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditClose} color="secondary">Cancel</Button>
+          <Button onClick={handleSave} color="primary">Save</Button>
+        </DialogActions>
+      </Dialog>
+    </Paper>
   );
 };
- 
+
 export default ResearchDiv;
- 
- 

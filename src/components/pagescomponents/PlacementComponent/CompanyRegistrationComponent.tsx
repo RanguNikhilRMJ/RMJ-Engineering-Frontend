@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import axios from "axios";
-
-
+import { fetchCardDetailstoken } from '@/modules/apitoken';
+import { DIGITAL_CAMPUS_BASE_URL } from '@/modules/apiConfig';
 const ItemType = "ROUND";
 
 interface Round {
@@ -53,14 +52,12 @@ const CompanyRegistration = () => {
     };
   
     try {
-      const response = await axios.post(
-        "DIGITAL_CAMPUS_BASE_URL/createCompanyExamreg", // Replace with your backend API endpoint
-        formData,
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const apiEndpoint = `${DIGITAL_CAMPUS_BASE_URL}/api/placement/createCompanyExamregId`;
+      const token = "your-auth-token"; // Replace with your token logic if applicable
+      const registeredData = await fetchCardDetailstoken(apiEndpoint, 'POST', formData, token);
   
       // Success handling
-      console.log("Response:", response.data);
+      console.log("Response:", registeredData);
       alert("Company Registered Successfully!");
     } catch (error) {
       // Error handling
@@ -71,48 +68,118 @@ const CompanyRegistration = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div style={containerStyle}>
-        <h1 style={titleStyle}>Company Registration</h1>
+      <div
+        style={{
+          maxWidth: "800px",
+          margin: "0 auto",
+          padding: "20px",
+          backgroundColor: "#f9f9f9",
+          borderRadius: "8px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         {/* Company Details */}
-        <div style={formGroupStyle}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "20px",
+            marginBottom: "20px",
+          }}
+        >
           <div>
-            <label style={labelStyle}>Company Name:</label>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "5px",
+                fontWeight: "bold",
+              }}
+            >
+              Company Name:
+            </label>
             <input
               type="text"
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
               placeholder="Enter company name"
-              style={inputStyle}
+              style={{
+                padding: "10px",
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                width: "100%",
+              }}
             />
           </div>
           <div>
-            <label style={labelStyle}>Package Type:</label>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "5px",
+                fontWeight: "bold",
+              }}
+            >
+              Package Type:
+            </label>
             <input
               type="text"
               value={packageType}
               onChange={(e) => setPackageType(e.target.value)}
               placeholder="Enter package (e.g., LPA)"
-              style={inputStyle}
+              style={{
+                padding: "10px",
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                width: "100%",
+              }}
             />
           </div>
+          
         </div>
 
         {/* Add New Round */}
-        <div style={addRoundContainerStyle}>
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            marginBottom: "20px",
+          }}
+        >
           <input
             type="text"
             value={newRoundName}
             onChange={(e) => setNewRoundName(e.target.value)}
             placeholder="Add new round"
-            style={inputStyle}
+            style={{
+              padding: "10px",
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+              width: "100%",
+            }}
           />
-          <button style={addButtonStyle} onClick={addRound}>
+          <button
+            style={{
+              backgroundColor: "#4caf50",
+              color: "#fff",
+              border: "none",
+              padding: "10px",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+            onClick={addRound}
+          >
             Add
           </button>
         </div>
 
         {/* Rounds (Drag-and-Drop) */}
-        <div style={roundsContainerStyle}>
+        <div
+          style={{
+            backgroundColor: "#fff",
+            padding: "10px",
+            borderRadius: "5px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          }}
+        >
           {rounds.map((round, index) => (
             <DraggableRound
               key={round.id}
@@ -125,7 +192,19 @@ const CompanyRegistration = () => {
         </div>
 
         {/* Save Button */}
-        <button style={saveButtonStyle} onClick={handleSave}>
+        <button
+          style={{
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            padding: "10px",
+            borderRadius: "5px",
+            width: "100%",
+            cursor: "pointer",
+            marginTop: "20px",
+          }}
+          onClick={handleSave}
+        >
           Save
         </button>
       </div>
@@ -166,99 +245,33 @@ const DraggableRound: React.FC<DraggableRoundProps> = ({
   drag(drop(ref));
 
   return (
-    <div ref={ref} style={roundStyle}>
+    <div
+      ref={ref}
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "10px",
+        border: "1px solid #ddd",
+        borderRadius: "5px",
+        marginBottom: "5px",
+        backgroundColor: "#fefefe",
+      }}
+    >
       <span>{round.name}</span>
-      <button onClick={() => removeRound(round.id)} style={removeButtonStyle}>
+      <button
+        onClick={() => removeRound(round.id)}
+        style={{
+          backgroundColor: "transparent",
+          color: "#ff4d4f",
+          border: "none",
+          cursor: "pointer",
+          fontSize: "18px",
+        }}
+      >
         &times;
       </button>
     </div>
   );
-};
-
-// Styles
-const containerStyle: React.CSSProperties = {
-  maxWidth: "800px",
-  margin: "0 auto",
-  padding: "20px",
-  backgroundColor: "#f9f9f9",
-  borderRadius: "8px",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-};
-
-const titleStyle: React.CSSProperties = {
-  textAlign: "center",
-  marginBottom: "20px",
-};
-
-const formGroupStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "space-between",
-  gap: "20px",
-  marginBottom: "20px",
-};
-
-const labelStyle: React.CSSProperties = {
-  display: "block",
-  marginBottom: "5px",
-  fontWeight: "bold",
-};
-
-const inputStyle: React.CSSProperties = {
-  padding: "10px",
-  border: "1px solid #ccc",
-  borderRadius: "5px",
-  width: "100%",
-};
-
-const addRoundContainerStyle: React.CSSProperties = {
-  display: "flex",
-  gap: "10px",
-  marginBottom: "20px",
-};
-
-const addButtonStyle: React.CSSProperties = {
-  backgroundColor: "#4caf50",
-  color: "#fff",
-  border: "none",
-  padding: "10px",
-  borderRadius: "5px",
-  cursor: "pointer",
-};
-
-const roundsContainerStyle: React.CSSProperties = {
-  backgroundColor: "#fff",
-  padding: "10px",
-  borderRadius: "5px",
-  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-};
-
-const roundStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "space-between",
-  padding: "10px",
-  border: "1px solid #ddd",
-  borderRadius: "5px",
-  marginBottom: "5px",
-  backgroundColor: "#fefefe",
-};
-
-const removeButtonStyle: React.CSSProperties = {
-  backgroundColor: "transparent",
-  color: "#ff4d4f",
-  border: "none",
-  cursor: "pointer",
-  fontSize: "18px",
-};
-
-const saveButtonStyle: React.CSSProperties = {
-  backgroundColor: "#007bff",
-  color: "#fff",
-  border: "none",
-  padding: "10px",
-  borderRadius: "5px",
-  width: "100%",
-  cursor: "pointer",
-  marginTop: "20px",
 };
 
 export default CompanyRegistration;

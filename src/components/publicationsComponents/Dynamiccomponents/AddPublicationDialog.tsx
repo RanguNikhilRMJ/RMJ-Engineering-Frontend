@@ -54,11 +54,11 @@ const AddPublicationDialog: React.FC<AddPublicationDialogProps> = ({
       });
     } else if (selectedEndpoint === '/publications/publicationproductUpdateorsave') {
       setFormFields([
-         'title', 'producttype', 'date', 'datetime', 'members', 'condetedby', 'proof',
+         'title', 'producttype', 'date', 'members', 'condetedby', 'proof',
         'verifiedstatus', 'facultyid',
       ]);
       setFieldTypes({
-       title: 'string', producttype: 'string', date: 'date', datetime: 'date', members: 'string',
+       title: 'string', producttype: 'string', date: 'date', members: 'string',
         condetedby: 'string', proof: 'string', verifiedstatus: 'string', facultyid: 'string',
       });
     } else if (selectedEndpoint === '/publications/PublicationsCourtUpdateorsave') {
@@ -73,11 +73,11 @@ const AddPublicationDialog: React.FC<AddPublicationDialogProps> = ({
       });
     } else if (selectedEndpoint === '/publications/PublicationsContentUpdateorsave') {
       setFormFields([
-         'contenttitle', 'type', 'datetime', 'acadamicid', 'facultyid', 'verifiedby',
+         'contenttitle', 'type', 'acadamicid', 'facultyid', 'verifiedby',
         'verifiedstatus', 'verifieddatetime',
       ]);
       setFieldTypes({
-         contenttitle: 'string', type: 'string', datetime: 'date', acadamicid: 'number',
+         contenttitle: 'string', type: 'string', acadamicid: 'number',
         facultyid: 'string', verifiedby: 'string', verifiedstatus: 'string', verifieddatetime: 'date',
       });
     } else if (selectedEndpoint === '/publications/PublicationsConferenceUpdateorsave') {
@@ -152,20 +152,19 @@ const AddPublicationDialog: React.FC<AddPublicationDialogProps> = ({
       });
     } else if (selectedEndpoint === '/publications/PublicationResearchProjectUpdateorsave') {
       setFormFields([
-        'title', 'researchagency', 'amount', 'date', 'datetime', 'status', 'facultyid', 'verifiedstatus',
+        'title', 'researchagency', 'amount', 'date', 'status', 'facultyid', 'verifiedstatus',
         'proof', 'positionnumber',
       ]);
       setFieldTypes({
-        id: 'number', title: 'string', researchagency: 'string', amount: 'number', date: 'date', datetime: 'date',
+        id: 'number', title: 'string', researchagency: 'string', amount: 'number', date: 'date',
         status: 'string', facultyid: 'string', verifiedstatus: 'string', proof: 'string', positionnumber: 'string',
       });
     } else  if (selectedEndpoint === '/publications/PublicationResearchOutcomeUpdateorsave') {
-      setFormFields([ 'researchid', 'description', 'date', 'datetime', 'facultyid', 'verifiedstatus', 'proof']);
+      setFormFields([ 'researchid', 'description', 'date', 'facultyid', 'verifiedstatus', 'proof']);
       setFieldTypes({
         researchid: 'number',
         description: 'string',
         date: 'date',
-        datetime: 'date',
         facultyid: 'string',
         verifiedstatus: 'string',
         proof: 'string',
@@ -229,14 +228,13 @@ const AddPublicationDialog: React.FC<AddPublicationDialogProps> = ({
       });
     } else if (selectedEndpoint === '/publications/PublicationConsultancyUpdateorsave') {
       setFormFields([
-      'title', 'consultancyname', 'amount', 'date', 'datetime', 'facultyid', 'verifiedstatus', 'proof',
+      'title', 'consultancyname', 'amount', 'date', 'facultyid', 'verifiedstatus', 'proof',
       ]);
       setFieldTypes({
         title: 'string',
         consultancyname: 'string',
         amount: 'number',
         date: 'date',
-        datetime: 'date',
         facultyid: 'string',
         verifiedstatus: 'string',
         proof: 'string',
@@ -259,6 +257,13 @@ const AddPublicationDialog: React.FC<AddPublicationDialogProps> = ({
     if (formattedData.date) {
       formattedData.date = new Date(formattedData.date as string).toISOString();
     }
+    if (formattedData.amount) {
+      formattedData.amount = Number(formattedData.amount); 
+    }
+    if (formattedData.seminarsregistrationamount) {
+      formattedData.seminarsregistrationamount = Number(formattedData.seminarsregistrationamount); 
+    }
+    
  
     const token = localStorage.getItem('token');
     if (!token) {
@@ -282,6 +287,8 @@ const AddPublicationDialog: React.FC<AddPublicationDialogProps> = ({
         setPublicationData({});
         handleClose();
       } else {
+        handleClose();
+
         const errorResult = await response.json();
         setErrorMessage(errorResult.message || 'Failed to add publication.');
       }
