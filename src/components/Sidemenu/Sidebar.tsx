@@ -69,6 +69,7 @@ const staticMenuDataprincipal: MenuItem[] = [
     ],
  
   },
+
   {
     label: 'Timetable',
     path: '',
@@ -123,7 +124,8 @@ const staticMenuDatahod: MenuItem[] = [
   {
     label: 'Chairman Dashbord',
     path: '/chairmanDashbord',
- 
+
+    
  
   },
   {
@@ -168,6 +170,19 @@ const staticMenuDatafaculty: MenuItem[] = [
     path: '/chairmanDashbord',
     icon: <HomeIcon />, // Added icon
   },
+
+  {
+    label: 'Placement',
+    path: '',
+    subMenu: [
+      { label: 'Company Registration', path: '/Placement/CompanyList' },
+      { label: 'Round Information', path: '/Placement/RoundInfo' },
+    ],
+ 
+  },
+
+  
+
   {
     label: 'Fee Module',
     path: '',

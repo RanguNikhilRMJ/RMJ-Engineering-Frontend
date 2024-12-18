@@ -228,6 +228,86 @@ const TimeTableComponent: React.FC<TimeTableProps> = ({ hedding }) => {
       }, 6000); 
     }
   };
+
+
+
+
+
+  const handleGenerateNewJSON = async () => {
+    try {
+      const formattedDate = formatDateToCustomFormat(new Date()); // Assuming it formats to "YYYY-MM-DD"
+      const token = localStorage.getItem('token') || undefined;
+      const year = selectedRow?.year;
+      const sem = selectedRow?.sem;
+      const apiEndpoint = `${DIGITAL_CAMPUS_BASE_URL}/api/attendance/saveBatch`;
+  
+      // Transform classes into the AttendanceRequest format
+      const periodKey = `period_${selectedRow?.period || "default"}`;
+const attendanceRequests = classes.map((student) => ({
+  studentRollNo: student.studentrollno,
+  branchid: selectedRow?.branchid,
+  courseid: selectedRow?.courseid,
+  section: selectedRow?.section,
+  orgid: selectedRow?.orgid,
+  sem: selectedRow?.sem,
+  acadamicid: selectedRow?.acadamicid,
+  classtype: "offline",
+  atttype: "web",
+  periodAttendance: {
+    [periodKey]: {
+      attendance: student.AttendanceStatus ? true : false,
+      remarks: student.AttendanceStatus ? "Present" : "Absent",
+    },
+  },
+}));
+  
+      // Create the AttendanceBatchRequest object
+      const attendanceBatchRequest = {
+        subjectCode: selectedRow?.subjectcode,
+        year: selectedRow?.year,
+        date: selectedDate ? selectedDate.format('YYYY-MM-DD') : '',
+        month: selectedDate ? parseInt(selectedDate.format('MM'), 10) : '',
+        attendanceRequests,
+      };
+  
+      console.log('Payload:', attendanceBatchRequest);
+  
+      // Send the batch request to the backend
+      const response = await fetchCardDetailstoken(apiEndpoint, 'POST', attendanceBatchRequest, token);
+  
+      setMessage('Attendance saved successfully!');
+      setSnackbarOpen(true);
+      setSeverity('success');
+      setTimeout(() => {
+        setSnackbarOpen(false);
+        setMessage(null);
+      }, 5000);
+  
+      // Refresh the view and reset the form
+      fetchClassView(selectedDate);
+      setClasses([]);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Error handling form submission:', error.message);
+        setMessage(error.message);
+      } else {
+        console.error('Unknown error occurred:', error);
+        setMessage('An unknown error occurred');
+      }
+      setSnackbarOpen(true);
+      setSeverity('error');
+      setTimeout(() => {
+        setSnackbarOpen(false);
+        setMessage(null);
+      }, 6000);
+    }
+  };
+  
+
+
+
+
+
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
     setMessage(null);
@@ -414,7 +494,7 @@ const TimeTableComponent: React.FC<TimeTableProps> = ({ hedding }) => {
             </Table>
            
           </TableContainer>
-          <Button variant="contained" color="primary" onClick={handleGenerateJSON}>Submit</Button>
+          <Button variant="contained" color="primary" onClick={handleGenerateNewJSON}>Submit</Button>
           </Paper>
           </>
           )}
