@@ -119,8 +119,7 @@ const CompanyForm: React.FC = () => {
 
   return (
     <>
-    <Layout>
-      <Box sx={{ padding: '20px' }}>
+      <Box >
         {/* <CustomSnackbar
           open={isSnackbarOpen}
           onClose={handleCloseSnackbar}
@@ -261,9 +260,12 @@ const CompanyForm: React.FC = () => {
         )} */}
 
 {dataList.length > 0 && (
-  <Box mt={4}>
-    <Typography variant="h6" gutterBottom>
-      All Submitted Companies:
+  <Box >
+    <Typography variant="h5" component="h1" sx={{ fontWeight: "bold" }} gutterBottom>
+      All  Companies:
+    </Typography>
+      <Typography variant="body1" paragraph>
+        List of all Registered company 
     </Typography>
     <Box
       component="table"
@@ -326,7 +328,7 @@ const CompanyForm: React.FC = () => {
                           },
                         }}
                       />
-             </Box>
+                 </Box>
           </Box>
         ))}
       </Box>
@@ -336,7 +338,6 @@ const CompanyForm: React.FC = () => {
 
 
       </Box>
-    </Layout>
     </>
 
   );
